@@ -11,9 +11,19 @@ Employee clocks out by 2:59am each day.
 
 ## Design
 * Validations were added on schedule model to apply all the given constraints.
+
+Indexes on schedules tables
 * A composite unique index was added on start_time and end_time column to enforce one member of staff on shift at a time.
 * Another composite index was added on work_date and employee_id to optimize the where clause in the schedule model.
 * Index was added on work_date column of schedules table for the sorting in schedules index action.
 
 ## Improvement
 * Some code can be refactored in the schedules_controller to make it DRY.
+
+## To Run on Development Env
+* Git clone the repository and cd into it. This will create project specific gemset.
+* Run `$ bundle install` followed by `$ rails db:create db:migrate db:seed`
+* Run `$ rails s` to start the server. 
+* SQlite database is used to keep it lightweight.
+* Some seed data is added for demo.
+
