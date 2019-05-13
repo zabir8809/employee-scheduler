@@ -1,0 +1,32 @@
+<h1>Schedules</h1>
+<%= render 'layouts/flash_message' %>
+<div class='table-responsive'>
+  <table class='table table-hover border-left border-right border-bottom'>
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>Start time</th>
+        <th>End time</th>
+        <th>Shift hour</th>
+        <th>Employee</th>
+        <th colspan="2"></th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @schedules.each do |schedule| %>
+        <tr>
+          <td><%= schedule.work_date.strftime("%D") rescue '' %></td>
+          <td><%= schedule.start_time.to_s(:time) %></td>
+          <td><%= schedule.end_time.to_s(:time) %></td>
+          <td><%= schedule.shift_hour %></td>
+          <td><%= schedule.employee.name %></td>
+          <td><%= link_to 'Edit', edit_schedule_path(schedule) %></td>
+          <td><%= link_to 'Destroy', schedule, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div> 
+<br>
+<%= link_to 'New Schedule', new_schedule_path %>
