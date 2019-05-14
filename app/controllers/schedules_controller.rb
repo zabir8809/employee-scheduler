@@ -19,7 +19,6 @@ class SchedulesController < ApplicationController
   # POST /schedules
   def create
     @schedule = Schedule.new(schedule_params)
-    @schedule.shift_hour = (@schedule.end_time - @schedule.start_time)/3600
     if @schedule.save
       redirect_to schedules_path
     else
@@ -31,7 +30,6 @@ class SchedulesController < ApplicationController
   # PATCH/PUT /schedules/1
   def update
     if @schedule.update(schedule_params)
-      @schedule.update(shift_hour: (@schedule.end_time - @schedule.start_time)/3600)
       flash[:notice] = 'Schedule was successfully updated.'
       redirect_to schedules_path 
     else
@@ -59,6 +57,6 @@ class SchedulesController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def schedule_params
-      params.require(:schedule).permit(:start_time, :end_time, :employee_id)
+      params.require(:schedule).permit(:start_time, :end_time, :shift_hour, :employee_id)
     end
 end

@@ -16,11 +16,18 @@ class Schedule < ApplicationRecord
   validate :end_time_must_be_after_start_time
   # validation to check only one employee working in a given shift. Database level validation is also added as compound index
   validates :start_time, uniqueness: { scope: :end_time, message: 'shift already taken'}
-  # validates presence of shift hour and it is less than or equal to 8hrs
-  validates :shift_hour, presence: true, inclusion: {in: (0.0..8.0), message: 'cannot be more than 8hrs'}
+  # validates shift hour and it is less than or equal to 8hrs
+  validate :shift_length
   # validation to check employee max hours per week not exceeding 40 
-  validate :hours_per_week
+  validate :total_hours_per_week
 
+  before_validation :calculate_shift_hour, on: [:create, :update]
+
+  def calculate_shift_hour  
+    shift_hour = (self.end_time-self.start_time)/3600
+    self.assign_attributes({shift_hour: shift_hour})
+  end
+  
   private
   # validation to check start_time is always earlier than end_time
   def end_time_must_be_after_start_time
@@ -28,12 +35,18 @@ class Schedule < ApplicationRecord
       errors.add(:end_time, 'must be after start time')
     end
   end
-
+  
+  def shift_length
+    if (self.end_time-self.start_time)/3600 > 8
+      errors.add(:shift_hour, 'shift must be less than equal to 8 hrs')
+    end
+  end
    # validation to check employee max hours per week not exceeding 40
-  def hours_per_week
-    condition = Schedule.where(start_time: Date.today-7..Date.today, employee_id: self.employee_id).sum('shift_hour')
-    if condition >= 40
-      errors.add(:shift_hour, 'must be less than equal to 40 per week')
+  def total_hours_per_week
+    exsisting_shift_hour = Schedule.where(start_time: Date.today-7..Date.today, employee_id: self.employee_id).sum('shift_hour')
+    current_shift_hour = (self.end_time - self.start_time)/3600
+    if (current_shift_hour + exsisting_shift_hour) > 40
+      errors.add(:start_time, 'must be less than equal to 40 per week')
     end
   end
 
