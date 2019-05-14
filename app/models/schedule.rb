@@ -44,7 +44,7 @@ class Schedule < ApplicationRecord
    # validation to check employee max hours per week not exceeding 40
   def total_hours_per_week
     exsisting_shift_hour = Schedule.where(start_time: Date.today-7..Date.today, employee_id: self.employee_id).sum('shift_hour')
-    current_shift_hour = (self.end_time - self.start_time)/3600
+    current_shift_hour = self.id.present? ? 0 : (self.end_time - self.start_time)/3600
     if (current_shift_hour + exsisting_shift_hour) > 40
       errors.add(:start_time, 'must be less than equal to 40 per week')
     end
