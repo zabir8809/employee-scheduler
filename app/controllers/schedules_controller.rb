@@ -31,7 +31,7 @@ class SchedulesController < ApplicationController
   # PATCH/PUT /schedules/1
   def update
     if @schedule.update(schedule_params)
-      @schedule.shift_hour = (@schedule.end_time - @schedule.start_time)/3600
+      @schedule.update(shift_hour: (@schedule.end_time - @schedule.start_time)/3600)
       flash[:notice] = 'Schedule was successfully updated.'
       redirect_to schedules_path 
     else
