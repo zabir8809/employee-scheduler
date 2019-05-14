@@ -16,9 +16,9 @@
     <tbody>
       <% @schedules.each do |schedule| %>
         <tr>
-          <td><%= schedule.work_date.strftime("%D") rescue '' %></td>
-          <td><%= schedule.start_time.to_s(:time) %></td>
-          <td><%= schedule.end_time.to_s(:time) %></td>
+          <td><%= schedule.start_time.to_date.strftime("%m/%d/%Y") rescue '' %></td>
+          <td><%= schedule.start_time.strftime("%I:%M %p") rescue '' %></td>
+          <td><%= schedule.end_time.strftime("%I:%M %p") rescue '' %></td>
           <td><%= schedule.shift_hour %></td>
           <td><%= schedule.employee.name %></td>
           <td><%= link_to 'Edit', edit_schedule_path(schedule) %></td>

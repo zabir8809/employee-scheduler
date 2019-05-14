@@ -19,7 +19,6 @@ ActiveRecord::Schema.define(version: 2019_05_12_205839) do
   end
 
   create_table "schedules", force: :cascade do |t|
-    t.date "work_date"
     t.datetime "start_time"
     t.datetime "end_time"
     t.float "shift_hour"
@@ -27,9 +26,9 @@ ActiveRecord::Schema.define(version: 2019_05_12_205839) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["employee_id"], name: "index_schedules_on_employee_id"
+    t.index ["start_time", "employee_id"], name: "index_schedules_on_start_time_and_employee_id"
     t.index ["start_time", "end_time"], name: "index_schedules_on_start_time_and_end_time", unique: true
-    t.index ["work_date", "employee_id"], name: "index_schedules_on_work_date_and_employee_id"
-    t.index ["work_date"], name: "index_schedules_on_work_date"
+    t.index ["start_time"], name: "index_schedules_on_start_time"
   end
 
 end

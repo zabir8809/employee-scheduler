@@ -4,7 +4,7 @@ class SchedulesController < ApplicationController
 
   # GET /schedules
   def index
-    @schedules = Schedule.includes(:employee).order(work_date: :desc)
+    @schedules = Schedule.includes(:employee).order(start_time: :desc)
   end
 
   # GET /schedules/new
@@ -19,8 +19,6 @@ class SchedulesController < ApplicationController
   # POST /schedules
   def create
     @schedule = Schedule.new(schedule_params)
-    @schedule.start_time = @schedule.start_time.change(year: @schedule.work_date.year, month: @schedule.work_date.month, day: @schedule.work_date.day)
-    @schedule.end_time = @schedule.end_time.change(year: @schedule.work_date.year, month: @schedule.work_date.month, day: @schedule.work_date.day)
     @schedule.shift_hour = (@schedule.end_time - @schedule.start_time)/3600
     if @schedule.save
       redirect_to schedules_path
@@ -33,10 +31,7 @@ class SchedulesController < ApplicationController
   # PATCH/PUT /schedules/1
   def update
     if @schedule.update(schedule_params)
-      @schedule.start_time = @schedule.start_time.change(year: @schedule.work_date.year, month: @schedule.work_date.month, day: @schedule.work_date.day)
-      @schedule.end_time = @schedule.end_time.change(year: @schedule.work_date.year, month: @schedule.work_date.month, day: @schedule.work_date.day)
       @schedule.shift_hour = (@schedule.end_time - @schedule.start_time)/3600
-      byebug
       flash[:notice] = 'Schedule was successfully updated.'
       redirect_to schedules_path 
     else
@@ -64,6 +59,6 @@ class SchedulesController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def schedule_params
-      params.require(:schedule).permit(:work_date, :start_time, :end_time, :employee_id)
+      params.require(:schedule).permit(:start_time, :end_time, :employee_id)
     end
 end

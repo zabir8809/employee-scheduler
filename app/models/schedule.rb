@@ -4,8 +4,6 @@ class Schedule < ApplicationRecord
   belongs_to :employee
   # validates presence of employee_id
   validates :employee, presence: true
-  # validates presence of work date
-  validates :work_date, presence: true
   # validates presence of start_time
   validates :start_time, presence: true
   # validates no shift hour starting between 7am and 3am
@@ -33,7 +31,7 @@ class Schedule < ApplicationRecord
 
    # validation to check employee max hours per week not exceeding 40
   def hours_per_week
-    condition = Schedule.where(work_date: Date.today-7..Date.today, employee_id: self.employee_id).sum('shift_hour')
+    condition = Schedule.where(start_time: Date.today-7..Date.today, employee_id: self.employee_id).sum('shift_hour')
     if condition >= 40
       errors.add(:shift_hour, 'must be less than equal to 40 per week')
     end
