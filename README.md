@@ -17,9 +17,6 @@ Indexes on schedules tables
 * Another composite index was added on start_time and employee_id to optimize the where clause in the schedule model.
 * Index was added on start_time column of schedules table for the sorting in schedules index action.
 
-## Improvement
-* Some code can be refactored in the schedules_controller to make it DRY.
-
 ## To Run on Development Env
 * Git clone the repository and cd into it. This will create project specific gemset.
 * Run `$ bundle install` followed by `$ rails db:create db:migrate db:seed`
